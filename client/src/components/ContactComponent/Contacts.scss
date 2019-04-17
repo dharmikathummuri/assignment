@@ -1,0 +1,13 @@
+.contact-class {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .contacts-header {
+    display: flex;
+    justify-content: center;
+  }
+  .table-class {
+    display: flex;
+    align-items: center;
+  }
+}
