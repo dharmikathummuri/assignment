@@ -10,6 +10,7 @@ class Contacts extends Component {
     super(props);
     this.state = { contacts: "" };
     this.getContactsFromApi();
+    this.updateContact = this.updateContact.bind(this);
   }
 
   async getContactsFromApi() {
@@ -30,6 +31,25 @@ class Contacts extends Component {
     });
     return formattedData;
   }
+
+  findContact(id) {
+    const { contacts } = this.state;
+    return contacts.find(contact => {
+      return contact.id === id;
+    });
+  }
+
+  updateContact(event, id) {
+    event.preventDefault();
+    let contactToUpdate = this.findContact(id);
+    console.log("contactToUpdate", contactToUpdate);
+  }
+
+  deleteContact(event, id) {
+    event.preventDefault();
+    let contactTodelete = this.findContact(id);
+    console.log("contactTodelete", contactTodelete);
+  }
   renderContactList() {
     const { contacts } = this.state;
     let rows = [];
@@ -40,10 +60,24 @@ class Contacts extends Component {
           <td> {contacts[i]["email"]} </td>
           <td> {contacts[i]["phone"]} </td>
           <td>
-            <Button variant="secondary">Update</Button>
+            <Button
+              variant="secondary"
+              onClick={e => {
+                this.updateContact(e, contacts[i]["id"]);
+              }}
+            >
+              Update
+            </Button>
           </td>
           <td>
-            <Button variant="danger">Delete</Button>
+            <Button
+              variant="danger"
+              onClick={e => {
+                this.deleteContact(e, contacts[i]["id"]);
+              }}
+            >
+              Delete
+            </Button>
           </td>
         </tr>
       );
