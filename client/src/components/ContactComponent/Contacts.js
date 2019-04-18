@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { allContacts } from "../../actions/contactsActions";
 import { getContacts } from "../../contactsApiEndPoint";
 import { Table, Button } from "react-bootstrap";
-
+import { formatPhone, formatName } from "../../util";
 class Contacts extends Component {
   constructor(props) {
     super(props);
@@ -14,22 +14,18 @@ class Contacts extends Component {
 
   async getContactsFromApi() {
     let result = await getContacts();
-    this.setState({ contacts: result });
-    await this.props.allContacts(this.mapFormattedData(result));
-  }
-
-  formatPhone(number) {
-    return `number ${number}`;
+    let formattedData = this.mapFormattedData(result);
+    this.setState({ contacts: formattedData });
+    await this.props.allContacts(formattedData);
   }
 
   mapFormattedData(data) {
-    const { contacts } = this.state;
-    let formattedData = contacts.map(item => {
+    let formattedData = data.map(item => {
       return {
         id: item.id,
-        name: item.name,
+        name: formatName(item.name),
         email: item.email,
-        phone: this.formatPhone(item.phone)
+        phone: formatPhone(item.phone)
       };
     });
     return formattedData;
@@ -55,7 +51,7 @@ class Contacts extends Component {
     return rows;
   }
   render() {
-    const contacts = this.state.contacts;
+    const { contacts } = this.state;
     return (
       contacts && (
         <div className="contact-class">
