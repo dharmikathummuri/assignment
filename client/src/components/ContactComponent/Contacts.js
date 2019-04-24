@@ -85,8 +85,8 @@ class Contacts extends Component {
   handleclick(event) {
     event.preventDefault();
     this.state.showForm
-      ? this.setState({ showForm: false })
-      : this.setState({ showForm: true });
+      ? this.setState({ showForm: false, name: "", email: "", phone: "" })
+      : this.setState({ showForm: true, name: "", email: "", phone: "" });
   }
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
@@ -117,6 +117,17 @@ class Contacts extends Component {
   clearForm() {
     this.setState({ name: "", email: "", phone: "" });
   }
+  checkButtonDisabled() {
+    const { name, email, phone } = this.state;
+    let checkForEmptyString = element => {
+      return element === "";
+    };
+    if ([name, email, phone].some(checkForEmptyString)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   renderForm() {
     return (
       <div className="form-class">
@@ -124,6 +135,7 @@ class Contacts extends Component {
           <Form.Group controlId="formBasicName" onSubmit={this.handleSubmit}>
             <Form.Label>Full name</Form.Label>
             <Form.Control
+              size="lg"
               type="text"
               name="name"
               placeholder="Enter Name"
@@ -137,9 +149,10 @@ class Contacts extends Component {
           <Form.Group controlId="formBasicemail">
             <Form.Label>Email</Form.Label>
             <Form.Control
+              size="lg"
               type="email"
               name="email"
-              placeholder="Password"
+              placeholder="Enter Email"
               value={this.state.email}
               onChange={e => {
                 this.handleChange(e);
@@ -149,9 +162,10 @@ class Contacts extends Component {
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Phone Number</Form.Label>
             <Form.Control
+              size="lg"
               type="tel"
               name="phone"
-              placeholder="Phone Number"
+              placeholder="Enter Phone Number"
               value={this.state.phone}
               onChange={e => {
                 this.handleChange(e);
@@ -164,6 +178,7 @@ class Contacts extends Component {
             onClick={e => {
               this.handleSubmit(e);
             }}
+            disabled={this.checkButtonDisabled()}
           >
             Submit
           </Button>
@@ -212,22 +227,6 @@ class Contacts extends Component {
         <div className="contact-class">
           <div className="contacts-header">
             <h1>All contacts</h1>
-          </div>
-          <div className="table-class">
-            <Table responsive striped bordered hover variant="dark" size="sm">
-              <tbody>
-                <tr>
-                  <th>Full Name</th>
-                  <th>Email</th>
-                  <th> Phone</th>
-                  <th> Update</th>
-                  <th> Delete </th>
-                </tr>
-                {this.renderContactList()}
-              </tbody>
-            </Table>
-          </div>
-          <div className="create-button">
             <Button
               onClick={e => {
                 this.handleclick(e);
@@ -235,7 +234,25 @@ class Contacts extends Component {
             >
               Create Contact
             </Button>
-            {this.state.showForm && this.renderForm()}
+          </div>
+          <div className="container">
+            <div className="table-class">
+              <Table responsive striped bordered hover variant="dark" size="sm">
+                <tbody>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th> Phone</th>
+                    <th> Update</th>
+                    <th> Delete </th>
+                  </tr>
+                  {this.renderContactList()}
+                </tbody>
+              </Table>
+            </div>
+            <div className="create-button">
+              {this.state.showForm && this.renderForm()}
+            </div>
           </div>
         </div>
       )
