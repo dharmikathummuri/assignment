@@ -68,6 +68,7 @@ class Contacts extends Component {
   }
   async deleteContact(event, id) {
     event.preventDefault();
+    this.setState({ update: false, showForm: false });
     let { contacts } = this.state;
     // eslint-disable-next-line no-restricted-globals
     let deleteContact = confirm(
@@ -241,12 +242,8 @@ class Contacts extends Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return {
-    contacts: state.contactsReducer
-  };
-};
+
 export default connect(
-  mapStateToProps,
+  null,
   { allContacts }
 )(Contacts);
